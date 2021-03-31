@@ -1,14 +1,32 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:clima_app/utils/constants.dart';
 
 class LocationScreen extends StatefulWidget {
+  LocationScreen({this.locationWeather});
+  final locationWeather;
+
   @override
   _LocationScreenState createState() => _LocationScreenState();
 }
 
 class _LocationScreenState extends State<LocationScreen> {
+  int temp;
+  int cond;
+  String cityName;
+
+  @override
+  void initState() {
+    super.initState();
+    updateUI(widget.locationWeather);
+  }
+
+  void updateUI(dynamic weatherData) {
+    temp = (weatherData['main']['temp']).toInt();
+    cond = weatherData['weather'][0]['id'];
+    cityName = weatherData['name'];
+    print(temp);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +36,9 @@ class _LocationScreenState extends State<LocationScreen> {
             image: AssetImage('images/location_background.jpeg'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-                Colors.white.withOpacity(0.8), BlendMode.dstATop),
+              Colors.white.withOpacity(0.8),
+              BlendMode.dstATop,
+            ),
           ),
         ),
         constraints: BoxConstraints.expand(),
@@ -51,7 +71,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 child: Row(
                   children: [
                     Text(
-                      '32^',
+                      '$temp°',
                       style: kTempTextStyle,
                     ),
                     Text(
@@ -64,7 +84,7 @@ class _LocationScreenState extends State<LocationScreen> {
               Padding(
                 padding: EdgeInsets.only(right: 15.0),
                 child: Text(
-                  "It's time in San Francisco!",
+                  "It's time in $cityName!",
                   textAlign: TextAlign.right,
                   style: kMessageTextStyle,
                 ),
